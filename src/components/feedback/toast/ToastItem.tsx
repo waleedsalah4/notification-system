@@ -1,5 +1,6 @@
+import { useCallback, useEffect, useState } from "react";
 import { useAppDispatch } from "@/store";
-import { removeToast } from "@/store/toasts/toastsSlice";
+import { removeToast, stopDelayAppearance } from "@/store/toasts/toastsSlice";
 import { cn } from "@/lib/utils";
 import { CloseIcon } from "@/components/icons/icons";
 import type { TToast } from "@/types/toast.types";
@@ -22,6 +23,59 @@ interface ToastItemProps {
 function ToastItem({ toast }: ToastItemProps) {
   const variantClass = toastersValues[toast.type];
   const dispatch = useAppDispatch();
+
+  const [progressBarIndicator, setProgressBarIndicator] = useState(0);
+  // const [pauseProgressBarIndicator, setPauseProgressBarIndicator] =
+  //   useState(false);
+
+  const totalWidth = 100; // The progress bar width is 400 pixels, representing 100% completion.
+  const duration = 4000; // Total duration in milliseconds
+  const intervalTime = duration / totalWidth; // Interval time in milliseconds
+  const delayAnimationDuration = duration / 2;
+  const maxProgress = 100; // 100% completion
+
+  // remove toast handler
+  const closeToastHandler = useCallback(() => {
+    dispatch(removeToast(toast.id));
+    toast.onCloseToast?.();
+  }, [toast.id, toast.onCloseToast, dispatch]);
+
+  // progress bar indicator increment
+  useEffect(() => {
+    if (toast.delayAppearance) return;
+    const timerId = setInterval(() => {
+      setProgressBarIndicator((prevState) => {
+        if (prevState < maxProgress) {
+          return prevState + 1; //increase 1 pixel
+        }
+        return prevState;
+      });
+    }, intervalTime);
+
+    return () => clearInterval(timerId);
+  }, [intervalTime, toast.delayAppearance]);
+
+  //close toast when progress bar is completed
+  useEffect(() => {
+    if (progressBarIndicator === 100) {
+      closeToastHandler();
+    }
+  }, [progressBarIndicator, closeToastHandler]);
+
+  // handle delay animation
+  useEffect(() => {
+    if (toast.delayAppearance) {
+      const myTimeout = setTimeout(() => {
+        dispatch(stopDelayAppearance(toast.id));
+      }, 1000);
+
+      return () => clearTimeout(myTimeout);
+    }
+  }, [dispatch, toast.delayAppearance, delayAnimationDuration, toast.id]);
+
+  // if delay true, return nothing
+  if (toast.delayAppearance) return "";
+
   return (
     <div
       className={cn(
@@ -39,7 +93,13 @@ function ToastItem({ toast }: ToastItemProps) {
       >
         <CloseIcon className="size-2" />
       </button>
-      <span className="absolute bottom-0 left-0 inline-block h-1 w-full bg-current align-middle opacity-50">
+      <span
+        className="absolute bottom-0 left-0 inline-block h-1 bg-current align-middle opacity-50"
+        style={{
+          width: `${progressBarIndicator}%`,
+          transition: `width ${intervalTime}ms linear`,
+        }}
+      >
         placeholder
       </span>
     </div>

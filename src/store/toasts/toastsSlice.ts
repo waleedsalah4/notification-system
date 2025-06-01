@@ -22,13 +22,23 @@ const toastsSlice = createSlice({
         title: action.payload.title,
         message: action.payload.message,
         type: action.payload.type,
+        delayAppearance: action.payload.delayAppearance || false,
       });
     },
     removeToast: (state, action) => {
       state.records = state.records.filter((el) => el.id !== action.payload);
     },
+    stopDelayAppearance: (state, action) => {
+      state.records.map((el) => {
+        if (el.id === action.payload) {
+          return (el.delayAppearance = false);
+        }
+        return el;
+      });
+    },
   },
 });
 
-export const { addToast, removeToast } = toastsSlice.actions;
+export const { addToast, removeToast, stopDelayAppearance } =
+  toastsSlice.actions;
 export default toastsSlice.reducer;

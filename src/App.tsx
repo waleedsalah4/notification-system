@@ -12,6 +12,7 @@ function App() {
         type: "success",
         title: "add to card",
         message: "item added to your cart",
+        delayAppearance: true,
       })
     );
   };

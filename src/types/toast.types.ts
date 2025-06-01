@@ -7,4 +7,6 @@ export type TToast = {
   type: ToastVariant;
   title?: string;
   message: string;
+  delayAppearance?: boolean;
+  onCloseToast?: () => void;
 };
