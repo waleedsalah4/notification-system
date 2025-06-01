@@ -1,11 +1,10 @@
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
-import "./App.css";
 import { ToastList } from "@/components";
 
 function App() {
   return (
-    <main>
+    <main className="relative container flex min-h-screen flex-col items-center justify-center">
       <div>
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
@@ -16,7 +15,7 @@ function App() {
       </div>
       <h1>Notification System</h1>
       <div className="card">
-        <button>Toast</button>
+        <button className="button">Toast</button>
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
