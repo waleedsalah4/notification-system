@@ -1,5 +1,7 @@
-import { CloseIcon } from "@/components/icons/icons";
+import { useAppDispatch } from "@/store";
+import { removeToast } from "@/store/toasts/toastsSlice";
 import { cn } from "@/lib/utils";
+import { CloseIcon } from "@/components/icons/icons";
 import type { TToast } from "@/types/toast.types";
 
 export const toastersValues = {
@@ -19,6 +21,7 @@ interface ToastItemProps {
 
 function ToastItem({ toast }: ToastItemProps) {
   const variantClass = toastersValues[toast.type];
+  const dispatch = useAppDispatch();
   return (
     <div
       className={cn(
@@ -32,6 +35,7 @@ function ToastItem({ toast }: ToastItemProps) {
         type="button"
         aria-label="Close"
         className="absolute top-2 right-2 cursor-pointer text-white opacity-50 hover:opacity-75 focus:opacity-100"
+        onClick={() => dispatch(removeToast(toast.id))}
       >
         <CloseIcon className="size-2" />
       </button>

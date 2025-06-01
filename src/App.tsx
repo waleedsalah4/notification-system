@@ -1,8 +1,20 @@
+import { useAppDispatch } from "./store";
+import { addToast } from "@/store/toasts/toastsSlice";
+import { ToastList } from "@/components";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
-import { ToastList } from "@/components";
 
 function App() {
+  const dispatch = useAppDispatch();
+  const handleAddToast = () => {
+    dispatch(
+      addToast({
+        type: "success",
+        title: "add to card",
+        message: "item added to your cart",
+      })
+    );
+  };
   return (
     <main className="relative container flex min-h-screen flex-col items-center justify-center">
       <div>
@@ -15,7 +27,9 @@ function App() {
       </div>
       <h1>Notification System</h1>
       <div className="card">
-        <button className="button">Toast</button>
+        <button className="button" onClick={handleAddToast}>
+          Toast
+        </button>
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>

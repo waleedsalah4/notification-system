@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import type { PayloadAction } from "@reduxjs/toolkit";
 import type { TToast } from "@/types/toast.types";
 
 interface IToastSlice {
@@ -6,38 +7,28 @@ interface IToastSlice {
 }
 
 const initialState: IToastSlice = {
-  records: [
-    {
-      id: "1",
-      type: "success",
-      title: "add to card",
-      message: "item added to your cart",
-    },
-    {
-      id: "2",
-      type: "error",
-      //   title: "add to card",
-      message: "error from the server",
-    },
-    {
-      id: "3",
-      type: "warning",
-      //   title: "add to card",
-      message: "your session will expire soon",
-    },
-    {
-      id: "4",
-      type: "primary",
-      //   title: "add to card",
-      message: "nothing to do today",
-    },
-  ],
+  records: [],
 };
 
 const toastsSlice = createSlice({
   name: "toasts",
   initialState,
-  reducers: {},
+  reducers: {
+    addToast: (state, action: PayloadAction<TToast>) => {
+      state.records.push({
+        id: action.payload.id
+          ? action.payload.id
+          : new Date().getTime().toString(),
+        title: action.payload.title,
+        message: action.payload.message,
+        type: action.payload.type,
+      });
+    },
+    removeToast: (state, action) => {
+      state.records = state.records.filter((el) => el.id !== action.payload);
+    },
+  },
 });
 
+export const { addToast, removeToast } = toastsSlice.actions;
 export default toastsSlice.reducer;
