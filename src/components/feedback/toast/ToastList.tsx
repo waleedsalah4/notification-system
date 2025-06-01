@@ -1,10 +1,13 @@
+import { useAppSelector } from "@/store";
 import ToastItem from "./ToastItem";
 
 function ToastList() {
+  const { records } = useAppSelector((state) => state.toasts);
   return (
     <div className="absolute right-2.5 bottom-12 w-96">
-      <ToastItem variant="primary" />
-      <ToastItem variant="success" />
+      {records.map((record) => (
+        <ToastItem key={record.id} toast={record} />
+      ))}
     </div>
   );
 }

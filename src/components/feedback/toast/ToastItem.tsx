@@ -1,26 +1,24 @@
 import { CloseIcon } from "@/components/icons/icons";
 import { cn } from "@/lib/utils";
+import type { TToast } from "@/types/toast.types";
 
-const toastersValues = {
+export const toastersValues = {
   primary: "border-[#084298] bg-[#031633] text-[#6ea8fe]",
   secondary: "border-[#41464b] bg-[#161719] text-[#a7acb1]",
   success: "border-[#0f5132] bg-[#051b11] text-[#75b798]",
-  error: "border-[#842029] bg-[#2c0b0e] p-4 text-[#ea868f]",
-  warning: "border-[#997404] bg-[#332701] p-4 text-[#ffda6a]",
-  info: "border-[#087990] bg-[#032830] p-4 text-[#6edff6]",
-  light: "border-[#495057] bg-[#343a40] p-4 text-[#f8f9fa]",
-  dark: "border-[#343a40] bg-[#1a1d20] p-4 text-[#dee2e6]",
+  error: "border-[#842029] bg-[#2c0b0e]  text-[#ea868f]",
+  warning: "border-[#997404] bg-[#332701]  text-[#ffda6a]",
+  info: "border-[#087990] bg-[#032830]  text-[#6edff6]",
+  light: "border-[#495057] bg-[#343a40]  text-[#f8f9fa]",
+  dark: "border-[#343a40] bg-[#1a1d20]  text-[#dee2e6]",
 };
 
-type ToastVariant = keyof typeof toastersValues;
-
 interface ToastItemProps {
-  variant: ToastVariant;
-  // children?: React.ReactNode;
+  toast: TToast;
 }
 
-function ToastItem({ variant }: ToastItemProps) {
-  const variantClass = toastersValues[variant];
+function ToastItem({ toast }: ToastItemProps) {
+  const variantClass = toastersValues[toast.type];
   return (
     <div
       className={cn(
@@ -28,8 +26,8 @@ function ToastItem({ variant }: ToastItemProps) {
         variantClass
       )}
     >
-      <h5 className="text-base capitalize">title</h5>
-      <p className="mb-0 text-[15px] capitalize">this is the message</p>
+      <h5 className="text-base capitalize">{toast.title}</h5>
+      <p className="text-[15px] capitalize">{toast.message}</p>
       <button
         type="button"
         aria-label="Close"
