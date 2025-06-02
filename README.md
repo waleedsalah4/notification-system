@@ -14,6 +14,7 @@ A customizable toast notification system for React with built-in animations, ico
 - 🕒 Optional delay animation
 - 🧩 Custom title, message, and icons supported
 - 💨 Auto-dismiss with animation
+- 🔁 **Callback support**: Run a function after the toast closes
 
 ---
 
@@ -35,18 +36,21 @@ const handleAddToast = () => {
 ---
 
 ## 💡 Customization
+
 You can fully customize:
+
 - type: "success" | "error" | "info" | "warning" | "primary" | etc.
 - title: String
 - message: String
 - delayAppearance: Boolean
 - icon: can be added
 - position: Controlled via <ToastList position="top-right" />
+- run a callback function `onCloseToast: () => console.log("Toast has been closed!")`
 
-
-----
+---
 
 ## 📦 Installation
+
 Clone this repo:
 
 ```tsx
@@ -60,10 +64,9 @@ npm run dev
 ---
 
 ## 🛠 Built With
+
 - React
 - TypeScript
 - Redux Toolkit
 - Tailwind CSS
 - Vite
-
-

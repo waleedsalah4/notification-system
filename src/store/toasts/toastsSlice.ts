@@ -23,6 +23,7 @@ const toastsSlice = createSlice({
         message: action.payload.message,
         type: action.payload.type,
         delayAppearance: action.payload.delayAppearance || false,
+        onCloseToast: action.payload.onCloseToast,
       });
     },
     removeToast: (state, action) => {

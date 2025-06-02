@@ -10,7 +10,12 @@ export const ShowToastButton = () => {
   };
   return (
     <button
-      onClick={() => handleAddToast(toastsData.primary)}
+      onClick={() =>
+        handleAddToast({
+          ...toastsData.primary,
+          onCloseToast: () => console.log("HI!"),
+        })
+      }
       className="w-36 rounded-lg bg-[#031633] px-4 py-2 text-base text-white transition hover:bg-[#161c27]"
     >
       Show Toast
