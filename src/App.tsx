@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import {
   ToastList,
   ToastButtons,
@@ -6,7 +7,6 @@ import {
   GithubButton,
   ShowToastButton,
 } from "@/components";
-
 import type { TPosition } from "@/types/toast.types";
 
 function App() {

@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from "motion/react";
 import { useAppSelector } from "@/store";
 import ToastItem from "./ToastItem";
 import { cn } from "@/lib/utils";
@@ -25,9 +26,20 @@ function ToastList({ position }: Props) {
         "right-4 bottom-4 items-end": position === "bottom-right",
       })}
     >
-      {records.map((record) => (
-        <ToastItem key={record.id} toast={record} />
-      ))}
+      <AnimatePresence>
+        {records.map((record) => (
+          <motion.div
+            key={record.id}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ ease: "easeInOut" }}
+            layout
+          >
+            <ToastItem toast={record} />
+          </motion.div>
+        ))}
+      </AnimatePresence>
     </div>
   );
 }
