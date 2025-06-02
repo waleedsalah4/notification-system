@@ -1,6 +1,8 @@
 # 🔔 Notification Toast
 
-An customizable toast notification system for React with built-in animations, icons, positioning, delay appearance, and more.
+A customizable toast notification system for React with built-in animations, icons, positioning, delay appearance, and more.
+
+![notification toast](https://github.com/user-attachments/assets/d07f98dd-d64a-47c6-8c87-68d93009ffab)
 
 ---
 
@@ -29,3 +31,39 @@ const handleAddToast = () => {
   );
 };
 ```
+
+---
+
+## 💡 Customization
+You can fully customize:
+- type: "success" | "error" | "info" | "warning" | "primary" | etc.
+- title: String
+- message: String
+- delayAppearance: Boolean
+- icon: can be added
+- position: Controlled via <ToastList position="top-right" />
+
+
+----
+
+## 📦 Installation
+Clone this repo:
+
+```tsx
+git clone https://github.com/waleedsalah4/notification-system.git
+cd notification-system
+npm install
+npm run dev
+
+```
+
+---
+
+## 🛠 Built With
+- React
+- TypeScript
+- Redux Toolkit
+- Tailwind CSS
+- Vite
+
+
