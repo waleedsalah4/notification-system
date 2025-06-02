@@ -1,10 +1,30 @@
 import { useAppSelector } from "@/store";
 import ToastItem from "./ToastItem";
+import { cn } from "@/lib/utils";
+import type { TPosition } from "@/types/toast.types";
 
-function ToastList() {
+interface Props {
+  position: TPosition;
+}
+
+function ToastList({ position }: Props) {
   const { records } = useAppSelector((state) => state.toasts);
   return (
-    <div className="absolute right-2.5 bottom-12 w-[400px]">
+    <div
+      className={cn("fixed z-50 w-[400px]", {
+        // Top positions
+        "top-4 left-4 items-start": position === "top-left",
+        "top-4 left-1/2 -translate-x-1/2 items-center":
+          position === "top-center",
+        "top-4 right-4 items-end": position === "top-right",
+
+        // Bottom positions
+        "bottom-4 left-4 items-start": position === "bottom-left",
+        "bottom-4 left-1/2 -translate-x-1/2 items-center":
+          position === "bottom-center",
+        "right-4 bottom-4 items-end": position === "bottom-right",
+      })}
+    >
       {records.map((record) => (
         <ToastItem key={record.id} toast={record} />
       ))}

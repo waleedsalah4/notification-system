@@ -25,8 +25,8 @@ function ToastItem({ toast }: ToastItemProps) {
   const dispatch = useAppDispatch();
 
   const [progressBarIndicator, setProgressBarIndicator] = useState(0);
-  // const [pauseProgressBarIndicator, setPauseProgressBarIndicator] =
-  //   useState(false);
+  const [pauseProgressBarIndicator, setPauseProgressBarIndicator] =
+    useState(false);
 
   const totalWidth = 100; // The progress bar width is 400 pixels, representing 100% completion.
   const duration = 4000; // Total duration in milliseconds
@@ -40,20 +40,29 @@ function ToastItem({ toast }: ToastItemProps) {
     toast.onCloseToast?.();
   }, [toast.id, toast.onCloseToast, dispatch]);
 
+  //handle mouse hover over
+  const handleMouseEvent = () => {
+    setPauseProgressBarIndicator((prevState) => !prevState);
+  };
+
   // progress bar indicator increment
   useEffect(() => {
+    // if delay true stop progress bar
     if (toast.delayAppearance) return;
+
     const timerId = setInterval(() => {
       setProgressBarIndicator((prevState) => {
-        if (prevState < maxProgress) {
-          return prevState + 1; //increase 1 pixel
-        }
+        //if pause true stop incrementing progress
+        if (!pauseProgressBarIndicator)
+          if (prevState < maxProgress) {
+            return prevState + 1; //increase 1 pixel
+          }
         return prevState;
       });
     }, intervalTime);
 
     return () => clearInterval(timerId);
-  }, [intervalTime, toast.delayAppearance]);
+  }, [intervalTime, pauseProgressBarIndicator, toast.delayAppearance]);
 
   //close toast when progress bar is completed
   useEffect(() => {
@@ -82,6 +91,8 @@ function ToastItem({ toast }: ToastItemProps) {
         "relative mb-4 overflow-hidden rounded-md border p-4 text-start",
         variantClass
       )}
+      onMouseEnter={handleMouseEvent}
+      onMouseLeave={handleMouseEvent}
     >
       <h5 className="text-base capitalize">{toast.title}</h5>
       <p className="text-[15px] capitalize">{toast.message}</p>
