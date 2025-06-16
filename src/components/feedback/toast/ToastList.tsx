@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "motion/react";
-import { useAppSelector } from "@/store";
+import { useToastStore } from "@/store/toastStore";
 import ToastItem from "./ToastItem";
 import { cn } from "@/lib/utils";
 import type { TPosition } from "@/types/toast.types";
@@ -9,7 +9,7 @@ interface Props {
 }
 
 function ToastList({ position }: Props) {
-  const { records } = useAppSelector((state) => state.toasts);
+  const records = useToastStore((state) => state.records);
   return (
     <div
       className={cn("fixed z-50 w-[400px]", {

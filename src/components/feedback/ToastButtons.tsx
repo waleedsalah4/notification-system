@@ -1,12 +1,11 @@
-import { useAppDispatch } from "@/store";
-import { addToast } from "@/store/toasts/toastsSlice";
+import { useToastStore } from "@/store/toastStore";
 import { toastsData } from "@/constants";
 import type { TToast } from "@/types/toast.types";
 
 function ToastButtons() {
-  const dispatch = useAppDispatch();
+  const { addToast } = useToastStore();
   const handleAddToast = (toast: TToast) => {
-    dispatch(addToast(toast));
+    addToast(toast);
   };
   return (
     <div className="flex flex-wrap items-center justify-start gap-4">
