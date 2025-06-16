@@ -1,4 +1,6 @@
-import { useAppSelector } from "@/store";
+// components/ToastList.tsx
+import { AnimatePresence, motion } from "motion/react";
+import { useToasts } from "@/context/ToastContext";
 import ToastItem from "./ToastItem";
 import { cn } from "@/lib/utils";
 import type { TPosition } from "@/types/toast.types";
@@ -8,7 +10,9 @@ interface Props {
 }
 
 function ToastList({ position }: Props) {
-  const { records } = useAppSelector((state) => state.toasts);
+  const { state } = useToasts();
+  const { records } = state;
+
   return (
     <div
       className={cn("fixed z-50 w-[400px]", {
@@ -25,9 +29,20 @@ function ToastList({ position }: Props) {
         "right-4 bottom-4 items-end": position === "bottom-right",
       })}
     >
-      {records.map((record) => (
-        <ToastItem key={record.id} toast={record} />
-      ))}
+      <AnimatePresence>
+        {records.map((record) => (
+          <motion.div
+            key={record.id}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ ease: "easeInOut" }}
+            layout
+          >
+            <ToastItem toast={record} />
+          </motion.div>
+        ))}
+      </AnimatePresence>
     </div>
   );
 }

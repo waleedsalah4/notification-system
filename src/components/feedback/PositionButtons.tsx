@@ -1,5 +1,4 @@
-import { useAppDispatch } from "@/store";
-import { addToast } from "@/store/toasts/toastsSlice";
+import { useToasts } from "@/context/ToastContext";
 import { positions, toastsData } from "@/constants";
 import { cn } from "@/lib/utils";
 import type { TPosition } from "@/types/toast.types";
@@ -9,9 +8,9 @@ interface Props {
   position: TPosition;
 }
 function PositionButtons({ handlePositionChange, position }: Props) {
-  const dispatch = useAppDispatch();
+  const { addToast } = useToasts();
   const handleAddToast = () => {
-    dispatch(addToast(toastsData.info));
+    addToast(toastsData.info);
   };
   const onPositionChange = (pos: TPosition) => {
     handlePositionChange(pos);

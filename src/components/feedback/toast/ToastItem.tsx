@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useAppDispatch } from "@/store";
-import { removeToast, stopDelayAppearance } from "@/store/toasts/toastsSlice";
+import { useToasts } from "@/context/ToastContext";
 import { cn } from "@/lib/utils";
 import { CloseIcon } from "@/components/icons/icons";
 import type { TToast } from "@/types/toast.types";
@@ -22,7 +21,7 @@ interface ToastItemProps {
 
 function ToastItem({ toast }: ToastItemProps) {
   const variantClass = toastersValues[toast.type];
-  const dispatch = useAppDispatch();
+  const { removeToast, stopDelayAppearance } = useToasts();
 
   const [progressBarIndicator, setProgressBarIndicator] = useState(0);
   const [pauseProgressBarIndicator, setPauseProgressBarIndicator] =
@@ -36,9 +35,9 @@ function ToastItem({ toast }: ToastItemProps) {
 
   // remove toast handler
   const closeToastHandler = useCallback(() => {
-    dispatch(removeToast(toast.id));
+    removeToast(toast.id || "");
     toast.onCloseToast?.();
-  }, [toast.id, toast.onCloseToast, dispatch]);
+  }, [toast.id, toast.onCloseToast]);
 
   //handle mouse hover over
   const handleMouseEvent = () => {
@@ -75,12 +74,12 @@ function ToastItem({ toast }: ToastItemProps) {
   useEffect(() => {
     if (toast.delayAppearance) {
       const myTimeout = setTimeout(() => {
-        dispatch(stopDelayAppearance(toast.id));
+        stopDelayAppearance(toast.id || "");
       }, 1000);
 
       return () => clearTimeout(myTimeout);
     }
-  }, [dispatch, toast.delayAppearance, delayAnimationDuration, toast.id]);
+  }, [toast.delayAppearance, delayAnimationDuration, toast.id]);
 
   // if delay true, return nothing
   if (toast.delayAppearance) return "";
@@ -100,7 +99,7 @@ function ToastItem({ toast }: ToastItemProps) {
         type="button"
         aria-label="Close"
         className="absolute top-2 right-2 cursor-pointer text-white opacity-50 hover:opacity-75 focus:opacity-100"
-        onClick={() => dispatch(removeToast(toast.id))}
+        onClick={() => removeToast(toast.id || "")}
       >
         <CloseIcon className="size-2" />
       </button>
