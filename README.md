@@ -20,7 +20,13 @@ A customizable toast notification system for React with built-in animations, ico
 
 ## 🧱 Example Usage
 
+### With Redux
+
 ```tsx
+import { useAppDispatch } from "@/store";
+import { addToast } from "@/store/toasts/toastsSlice";
+//---
+const dispatch = useAppDispatch();
 const handleAddToast = () => {
   dispatch(
     addToast({
@@ -32,6 +38,36 @@ const handleAddToast = () => {
   );
 };
 ```
+### With Zustant
+```tsx
+import { useToastStore } from "@/store/toastStore";
+//---------
+const { addToast } = useToastStore();
+const handleAddToast = () => {
+    addToast({
+      type: "success",
+      title: "Success",
+      message: "This is a custom success toast!",
+      delayAppearance: false,
+    })
+};
+```
+
+### With Context API
+```tsx
+import { useToasts } from "@/context/ToastContext";
+//-------
+const { addToast } = useToasts();
+const handleAddToast = () => {
+    addToast({
+      type: "success",
+      title: "Success",
+      message: "This is a custom success toast!",
+      delayAppearance: false,
+    })
+};
+```
+
 
 ---
 
@@ -67,6 +103,6 @@ npm run dev
 
 - React
 - TypeScript
-- Redux Toolkit
+- Redux Toolkit | Zustant | Context APi
 - Tailwind CSS
 - Vite
