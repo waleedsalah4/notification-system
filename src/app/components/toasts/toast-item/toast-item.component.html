@@ -1,0 +1,26 @@
+<ng-container *ngIf="!toast.delayAppearance">
+  <div
+    class="relative mb-4 overflow-hidden rounded-md border p-4 text-start"
+    [ngClass]="variantClass()"
+  >
+    <h5 class="text-base capitalize">{{ toast.title }}</h5>
+    <p class="text-[15px] capitalize">{{ toast.message }}</p>
+
+    <button
+      type="button"
+      aria-label="Close"
+      class="absolute top-2 right-2 cursor-pointer text-white opacity-50 hover:opacity-75 focus:opacity-100"
+      (click)="closeToast()"
+    >
+      <app-close-icon class="size-2" />
+    </button>
+
+    <span
+      class="absolute bottom-0 left-0 inline-block h-1 bg-current align-middle opacity-50"
+      [style.width.%]="progress()"
+      [style.transition]="'width ' + intervalTime + 'ms linear'"
+    >
+      placeholder
+    </span>
+  </div>
+</ng-container>

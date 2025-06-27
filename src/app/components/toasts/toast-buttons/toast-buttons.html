@@ -1,0 +1,11 @@
+<div class="flex flex-wrap items-center justify-start gap-4">
+  @for (btn of toastButtons; track $index) {
+  <button
+    type="button"
+    [class]="btn.className"
+    (click)="handleAddToast(btn.toast)"
+  >
+    {{ btn.label }}
+  </button>
+  }
+</div>

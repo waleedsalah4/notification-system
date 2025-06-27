@@ -1,0 +1,7 @@
+<div [class]="getContainerClasses()">
+  @for (record of records(); track record.id) {
+    <div class="animate-fade-in-scale">
+      <app-toast-item [toast]="record" />
+    </div>
+  }
+</div>

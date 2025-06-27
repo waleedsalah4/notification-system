@@ -1,0 +1,15 @@
+<div class="flex w-full flex-wrap items-center justify-start gap-2">
+  @for (pos of positions(); track $index) {
+  <button
+    type="button"
+    (click)="onPositionChange(pos)"
+    [ngClass]="{
+      'bg-blue-600 text-white': position() === pos,
+      'bg-gray-800 text-gray-300 hover:bg-gray-700': position() !== pos,
+      'cursor-pointer rounded px-3 py-2 text-sm font-medium capitalize transition': true
+    }"
+  >
+    {{pos.replace("-", " ")}}
+  </button>
+  }
+</div>
