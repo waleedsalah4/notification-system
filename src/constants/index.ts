@@ -65,14 +65,25 @@ export const positions: TPosition[] = [
 ];
 
 export const toastersValues: Record<ToastVariant, string> = {
-  primary: 'border-[#084298] bg-[#031633] text-[#6ea8fe]',
-  secondary: 'border-[#41464b] bg-[#161719] text-[#a7acb1]',
-  success: 'border-[#0f5132] bg-[#051b11] text-[#75b798]',
-  error: 'border-[#842029] bg-[#2c0b0e]  text-[#ea868f]',
-  warning: 'border-[#997404] bg-[#332701]  text-[#ffda6a]',
-  info: 'border-[#087990] bg-[#032830]  text-[#6edff6]',
-  light: 'border-[#495057] bg-[#343a40]  text-[#f8f9fa]',
-  dark: 'border-[#343a40] bg-[#1a1d20]  text-[#dee2e6]',
+  primary: 'border-l-[#6ea8fe] bg-[#6ea8fe]/[0.06] text-[#6ea8fe]',
+  secondary: 'border-l-[#a7acb1] bg-[#a7acb1]/[0.06] text-[#a7acb1]',
+  success: 'border-l-[#75b798] bg-[#75b798]/[0.06] text-[#75b798]',
+  error: 'border-l-[#ea868f] bg-[#ea868f]/[0.06] text-[#ea868f]',
+  warning: 'border-l-[#ffda6a] bg-[#ffda6a]/[0.06] text-[#ffda6a]',
+  info: 'border-l-[#6edff6] bg-[#6edff6]/[0.06] text-[#6edff6]',
+  light: 'border-l-white bg-white/[0.06] text-[#f8f9fa]',
+  dark: 'border-l-[#dee2e6] bg-[#dee2e6]/[0.06] text-[#dee2e6]',
+};
+
+export const toasterAccentColors: Record<ToastVariant, string> = {
+  primary: '#6ea8fe',
+  secondary: '#a7acb1',
+  success: '#75b798',
+  error: '#ea868f',
+  warning: '#ffda6a',
+  info: '#6edff6',
+  light: '#f8f9fa',
+  dark: '#dee2e6',
 };
 
 export const totalWidth = 100; // The progress bar width is 400 pixels, representing 100% completion.

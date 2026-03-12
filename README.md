@@ -2,7 +2,7 @@
 
 A customizable toast notification system with built-in animations, icons, positioning, delay appearance, and more.
 
-Supports both **React** and **Angular** implementations in separate branches.
+Supports **React**, **Angular**, and **Vue** implementations in separate branches.
 
 ![notification toast](https://github.com/user-attachments/assets/d07f98dd-d64a-47c6-8c87-68d93009ffab)
 
@@ -26,6 +26,7 @@ Supports both **React** and **Angular** implementations in separate branches.
 - `toast-with-zustand` - React version (with Zustand)
 - `toast-with-context-api` - React version (with Context API)
 - `toasts-in-angular` – Angular version
+- `toasts-in-vue` – Vue 3 version (with Pinia)
 
 ---
 
@@ -62,6 +63,21 @@ addToast() {
   });
 }
 
+```
+
+### Vue 3
+
+```ts
+import { useToastStore } from '@/stores/toaster';
+
+const store = useToastStore();
+
+store.addToast({
+  type: 'success',
+  title: 'Success',
+  message: 'This is a custom success toast!',
+  delayAppearance: false,
+});
 ```
 
 ---
@@ -106,6 +122,15 @@ ng serve // or npm run start
 
 ```
 
+#### Vue 3
+
+```bash
+git checkout toasts-in-vue
+npm install
+npm run dev
+
+```
+
 ---
 
 ## 🛠 Built With
@@ -125,3 +150,12 @@ ng serve // or npm run start
 - Standalone Components
 - Angular Signals
 - Tailwind CSS
+
+#### Vue 3 Version
+
+- Vue 3 (Composition API)
+- TypeScript
+- Pinia (state management)
+- motion-v (animations)
+- Tailwind CSS
+- Vite

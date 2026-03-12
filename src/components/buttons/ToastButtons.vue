@@ -1,100 +1,75 @@
 <script setup lang="ts">
 import { useToastStore } from '@/stores/toaster';
-import { toastsData } from '@/constants';
+import { toastsData, toasterAccentColors } from '@/constants';
+import type { ToastVariant } from '@/types';
+import ToastIcon from '@/components/icons/ToastIcon.vue';
+
 const store = useToastStore();
+
+const variants: { key: ToastVariant | 'delay'; label: string }[] = [
+  { key: 'primary', label: 'Primary' },
+  { key: 'secondary', label: 'Secondary' },
+  { key: 'success', label: 'Success' },
+  { key: 'error', label: 'Error' },
+  { key: 'warning', label: 'Warning' },
+  { key: 'info', label: 'Info' },
+  { key: 'light', label: 'Light' },
+  { key: 'dark', label: 'Dark' },
+  { key: 'delay', label: 'Delay' },
+];
+
+function getAccentColor(key: ToastVariant | 'delay'): string {
+  return key === 'delay' ? toasterAccentColors['info'] : toasterAccentColors[key as ToastVariant];
+}
 </script>
 
 <template>
-  <div class="flex flex-wrap items-center justify-start gap-4">
+  <div class="flex flex-wrap gap-3">
     <button
-      class="w-28 cursor-pointer rounded-lg border border-[#084298] bg-[#031633] px-3 py-2 text-base font-medium text-[#6ea8fe] capitalize"
-      @click="
-        {
-          store.addToast(toastsData.primary);
+      v-for="v in variants"
+      :key="v.key"
+      class="group flex cursor-pointer items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-medium capitalize transition-all duration-200 hover:scale-[1.03] hover:brightness-110"
+      :style="{
+        borderColor: `${getAccentColor(v.key)}40`,
+        backgroundColor: `${getAccentColor(v.key)}0d`,
+        color: getAccentColor(v.key),
+      }"
+      @mouseenter="
+        (e: MouseEvent) => {
+          const el = e.currentTarget as HTMLElement;
+          el.style.boxShadow = `0 0 18px ${getAccentColor(v.key)}35`;
+          el.style.borderColor = `${getAccentColor(v.key)}70`;
         }
       "
-    >
-      Primary
-    </button>
-    <button
-      class="w-28 cursor-pointer rounded-lg border border-[#41464b] bg-[#161719] px-3 py-2 text-base font-medium text-[#a7acb1] capitalize"
-      @click="
-        {
-          store.addToast(toastsData.secondary);
+      @mouseleave="
+        (e: MouseEvent) => {
+          const el = e.currentTarget as HTMLElement;
+          el.style.boxShadow = 'none';
+          el.style.borderColor = `${getAccentColor(v.key)}40`;
         }
       "
+      @click="store.addToast(toastsData[v.key])"
     >
-      Secondary
-    </button>
-    <button
-      class="w-28 cursor-pointer rounded-lg border border-[#0f5132] bg-[#051b11] px-3 py-2 text-base font-medium text-[#75b798] capitalize"
-      @click="
-        {
-          store.addToast(toastsData.success);
-        }
-      "
-    >
-      Success
-    </button>
-    <button
-      class="w-28 cursor-pointer rounded-lg border border-[#842029] bg-[#2c0b0e] px-3 py-2 text-base font-medium text-[#ea868f] capitalize"
-      @click="
-        {
-          store.addToast(toastsData.error);
-        }
-      "
-    >
-      Error
-    </button>
-    <button
-      class="w-28 cursor-pointer rounded-lg border border-[#997404] bg-[#332701] px-3 py-2 text-base font-medium text-[#ffda6a] capitalize"
-      @click="
-        {
-          store.addToast(toastsData.warning);
-        }
-      "
-    >
-      Warning
-    </button>
-    <button
-      class="w-28 cursor-pointer rounded-lg border border-[#087990] bg-[#032830] px-3 py-2 text-base font-medium text-[#6edff6] capitalize"
-      @click="
-        {
-          store.addToast(toastsData.info);
-        }
-      "
-    >
-      Info
-    </button>
-    <button
-      class="w-28 cursor-pointer rounded-lg border border-[#495057] bg-[#343a40] px-3 py-2 text-base font-medium text-[#f8f9fa] capitalize"
-      @click="
-        {
-          store.addToast(toastsData.light);
-        }
-      "
-    >
-      Light
-    </button>
-    <button
-      class="w-28 cursor-pointer rounded-lg border border-[#343a40] bg-[#1a1d20] px-3 py-2 text-base font-medium text-[#dee2e6] capitalize"
-      @click="
-        {
-          store.addToast(toastsData.dark);
-        }
-      "
-    >
-      Dark
-    </button>
-    <button
-      class="w-28 cursor-pointer rounded-lg border border-[#a9abad] bg-[#f8f9fa] px-3 py-2 text-base font-medium text-[#343a40] capitalize"
-      @click="
-        {
-          store.addToast(toastsData.delay);
-        }
-      "
-    >
-      Delay
+      <!-- Delay icon: clock -->
+      <svg
+        v-if="v.key === 'delay'"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        class="size-4 opacity-80 group-hover:opacity-100"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 0 0 0-1.5h-3.75V6Z"
+          clip-rule="evenodd"
+        />
+      </svg>
+      <ToastIcon
+        v-else
+        :type="v.key as ToastVariant"
+        class="size-4 opacity-80 group-hover:opacity-100"
+      />
+      {{ v.label }}
     </button>
   </div>
 </template>

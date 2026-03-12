@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { cn } from '@/lib/utils';
 import { useToastStore } from '@/stores/toaster';
-import type { ToastVariant, TToast } from '@/types';
+import type { TToast } from '@/types';
 import { ref, watch, computed } from 'vue';
 import CloseIcon from '../icons/CloseIcon.vue';
-import { toastersValues, intervalTime, delayAnimationDuration, maxProgress } from '@/constants';
+import ToastIcon from '../icons/ToastIcon.vue';
+import { toasterAccentColors, intervalTime, delayAnimationDuration, maxProgress } from '@/constants';
 
 const props = defineProps<{ toast: TToast }>();
 
-const variantClass = computed(() => toastersValues[props.toast.type]);
+const accentColor = computed(() => toasterAccentColors[props.toast.type]);
 const store = useToastStore();
 const progressBarIndicator = ref(0);
 const pauseProgressBarIndicator = ref(false);
@@ -17,7 +17,6 @@ function closeToastHandler() {
   store.removeToast(props.toast.id);
   props.toast.onCloseToast?.();
 }
-//handle mouse hover over
 function handleMouseEnter() {
   pauseProgressBarIndicator.value = true;
 }
@@ -25,17 +24,14 @@ function handleMouseLeave() {
   pauseProgressBarIndicator.value = false;
 }
 
-// progress bar indicator increment
 watch(
   [pauseProgressBarIndicator, () => props.toast.delayAppearance],
   (_, __, onCleanup) => {
-    // if delay true stop progress bar
     if (props.toast.delayAppearance) return;
     const timerId = setInterval(() => {
-      //if pause true stop incrementing progress
       if (!pauseProgressBarIndicator.value)
         if (progressBarIndicator.value < maxProgress) {
-          progressBarIndicator.value += 1; //increase 1 pixel
+          progressBarIndicator.value += 1;
         }
     }, intervalTime);
     onCleanup(() => clearInterval(timerId));
@@ -43,14 +39,12 @@ watch(
   { immediate: true },
 );
 
-//close toast when progress bar is completed
 watch(progressBarIndicator, () => {
   if (progressBarIndicator.value === 100) {
     closeToastHandler();
   }
 });
 
-// handle delay animation
 watch(
   [() => props.toast.delayAppearance, () => props.toast.id],
   (_, __, onCleanup) => {
@@ -58,7 +52,6 @@ watch(
       const myTimeout = setTimeout(() => {
         store.stopDelayAppearance(props.toast.id || '');
       }, delayAnimationDuration);
-
       onCleanup(() => clearTimeout(myTimeout));
     }
   },
@@ -68,34 +61,53 @@ watch(
 
 <template>
   <div
-    :class="cn('relative mb-4 overflow-hidden rounded-md border p-4 text-start', variantClass)"
+    v-if="!toast.delayAppearance"
+    class="relative mb-3 flex items-start gap-3 overflow-hidden rounded-2xl border border-white/8 p-4 text-start backdrop-blur-xl"
+    :style="{
+      background: `radial-gradient(ellipse at 0% 50%, ${accentColor}18 0%, transparent 60%), rgba(0, 0, 0, 0.65)`,
+    }"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
-    v-if="!toast.delayAppearance"
   >
-    <h5 class="text-base capitalize">{{ toast.title }}</h5>
-    <p class="text-[15px] capitalize">{{ toast.message }}</p>
+    <!-- Glowing icon badge -->
+    <div
+      class="mt-0.5 shrink-0 rounded-xl p-2"
+      :style="{
+        background: `${accentColor}20`,
+        boxShadow: `0 0 14px ${accentColor}40`,
+        color: accentColor,
+      }"
+    >
+      <ToastIcon :type="toast.type" />
+    </div>
 
+    <!-- Content -->
+    <div class="min-w-0 flex-1">
+      <h5 v-if="toast.title" class="text-sm font-semibold capitalize text-white">
+        {{ toast.title }}
+      </h5>
+      <p class="text-sm capitalize text-gray-300">{{ toast.message }}</p>
+    </div>
+
+    <!-- Close button -->
     <button
       type="button"
       aria-label="Close"
-      class="absolute top-2 right-2 cursor-pointer text-white opacity-50 hover:opacity-75 focus:opacity-100"
-      @click="
-        {
-          store.removeToast(toast.id);
-        }
-      "
+      class="shrink-0 rounded-lg p-1 text-gray-500 transition-all hover:bg-white/10 hover:text-white"
+      @click="store.removeToast(toast.id)"
     >
       <CloseIcon />
     </button>
+
+    <!-- Progress bar -->
     <span
-      class="absolute bottom-0 left-0 inline-block h-1 bg-current align-middle opacity-50"
+      class="absolute bottom-0 left-0 h-0.5 rounded-full"
       :style="{
         width: `${progressBarIndicator}%`,
+        background: accentColor,
+        boxShadow: `0 0 8px ${accentColor}80`,
         transition: `width ${intervalTime}ms linear`,
       }"
-    >
-      placeholder
-    </span>
+    />
   </div>
 </template>

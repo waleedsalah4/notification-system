@@ -7,62 +7,102 @@ import GithubButton from './components/buttons/GithubButton.vue';
 import ToastList from './components/toast/ToastList.vue';
 import ToastButtons from './components/buttons/ToastButtons.vue';
 import PositionButtons from './components/buttons/PositionButtons.vue';
+import FeatureHighlights from './components/sections/FeatureHighlights.vue';
+import PropsTable from './components/sections/PropsTable.vue';
+import TechStack from './components/sections/TechStack.vue';
 
 const position = ref<TPosition>('bottom-right');
 const store = useToastStore();
 function handleAddToast() {
-  store.addToast({ type: 'info', title: 'Success', message: 'Position changed!' });
+  store.addToast({ type: 'info', title: 'Position changed', message: `Now showing at ${position.value}` });
 }
 </script>
 
 <template>
-  <div class="relative container flex min-h-screen flex-col items-center justify-center gap-10">
-    <header class="flex flex-col items-center gap-4">
-      <h1>Notification Toast</h1>
-      <p class="text-lg text-gray-400">
-        A customizable toast notification system for React and Angular with built-in animations,
-        positioning, auto-dismiss, and more.
-      </p>
-      <div class="flex items-center gap-4">
-        <ShowToastButton />
-        <GithubButton />
-      </div>
-    </header>
+  <div class="relative min-h-screen">
+    <!-- Background decorative orbs -->
+    <div class="pointer-events-none fixed inset-0 overflow-hidden" aria-hidden="true">
+      <div class="absolute -top-48 -left-48 h-[500px] w-[500px] rounded-full bg-violet-600/10 blur-[120px]" />
+      <div class="absolute top-1/3 -right-48 h-96 w-96 rounded-full bg-blue-600/10 blur-[100px]" />
+      <div class="absolute -bottom-48 left-1/3 h-80 w-80 rounded-full bg-cyan-500/8 blur-[100px]" />
+    </div>
 
-    <main class="grid grid-cols-1 items-start gap-10">
-      <div class="flex flex-col gap-4">
-        <h2 class="text-start text-lg font-bold">Types</h2>
-        <p class="text-start text-base text-gray-300">
-          This notification system supports{{ ' ' }}
-          <span class="font-semibold">multiple toast types</span> — each styled with its own colors
-          for clarity: Primary, Success, Error, Warning, Info, and more.
-        </p>
-        <ToastButtons />
-      </div>
-      <div class="mt-8 text-start text-base text-gray-300">
-        <p class="">
-          You can customize <span class="font-semibold">title</span> and{{ ' ' }}
-          <span class="font-semibold">message</span> content, as well as add features like
-          <span class="font-semibold"> animation, pause on hover</span>, auto-dismiss delay, and
-          more.
-        </p>
-        <p class="">
-          Easily extendable and fully responsive — try triggering different toasts using the buttons
-          above.
-        </p>
-      </div>
-      <div class="flex flex-col items-start space-y-4">
-        <h2 class="mb-4 text-lg font-semibold">Toast Position</h2>
-        <p>Swipe direction changes depending on the position.</p>
-        <PositionButtons v-model:position="position" @change="handleAddToast" />
-        <pre
-          class="w-full overflow-auto rounded-lg bg-gray-900 p-4 text-start text-sm text-green-200"
-        >
-            <code>{{`<ToastList :position="position" />`}}</code>
-          </pre>
-      </div>
-    </main>
+    <div class="container relative flex flex-col items-center gap-16">
+      <!-- Hero -->
+      <header class="flex flex-col items-center gap-6 text-center">
+        <div class="flex items-center gap-2 rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-1.5">
+          <span class="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
+          <span class="text-sm font-medium text-violet-300">Vue 3 · Pinia · motion-v · TypeScript</span>
+        </div>
 
-    <ToastList :position="position" />
+        <h1 class="gradient-text text-5xl font-black tracking-tight sm:text-6xl md:text-7xl">
+          Toast Notifications
+        </h1>
+
+        <p class="max-w-lg text-base leading-relaxed text-gray-400">
+          A fully customizable notification system with built-in animations,
+          6 positions, auto-dismiss, pause on hover, and 8 beautiful variants.
+        </p>
+
+        <div class="flex items-center gap-3">
+          <ShowToastButton />
+          <GithubButton />
+        </div>
+      </header>
+
+      <!-- Divider -->
+      <div class="w-full">
+        <div class="h-px bg-linear-to-r from-transparent via-white/10 to-transparent" />
+      </div>
+
+      <!-- Feature highlights -->
+      <FeatureHighlights />
+
+      <!-- Main interactive sections -->
+      <main class="w-full space-y-6">
+        <!-- Toast types -->
+        <section class="glass-card p-8">
+          <div class="mb-6">
+            <div class="mb-1 flex items-center gap-3">
+              <div class="h-px flex-1 bg-linear-to-r from-transparent via-white/15 to-transparent" />
+              <span class="text-xs font-semibold uppercase tracking-widest text-gray-500">Variants</span>
+              <div class="h-px flex-1 bg-linear-to-r from-transparent via-white/15 to-transparent" />
+            </div>
+            <h2 class="mt-3 text-xl font-bold text-white">Toast Types</h2>
+            <p class="mt-1.5 text-sm text-gray-400">
+              8 distinct variants — each with its own icon, color, and personality.
+            </p>
+          </div>
+          <ToastButtons />
+        </section>
+
+        <!-- Position picker -->
+        <section class="glass-card p-8">
+          <div class="mb-6">
+            <div class="mb-1 flex items-center gap-3">
+              <div class="h-px flex-1 bg-linear-to-r from-transparent via-white/15 to-transparent" />
+              <span class="text-xs font-semibold uppercase tracking-widest text-gray-500">Positioning</span>
+              <div class="h-px flex-1 bg-linear-to-r from-transparent via-white/15 to-transparent" />
+            </div>
+            <h2 class="mt-3 text-xl font-bold text-white">Smart Positioning</h2>
+            <p class="mt-1.5 text-sm text-gray-400">
+              Place toasts in any of 6 corners or centers. Swipe direction adapts automatically.
+            </p>
+          </div>
+          <PositionButtons v-model:position="position" @change="handleAddToast" />
+          <pre
+            class="mt-6 overflow-auto rounded-xl border border-white/8 bg-black/50 p-4 text-start text-sm text-emerald-300"
+          ><code>{{ `<ToastList :position="'${position}'" />` }}</code></pre>
+        </section>
+
+        <!-- Props / API reference -->
+        <PropsTable />
+      </main>
+
+      <!-- Tech stack -->
+      <TechStack />
+
+      <ToastList :position="position" />
+    </div>
   </div>
 </template>
