@@ -1,17 +1,15 @@
-import { fileURLToPath } from "url";
-import { defineConfig } from "vite";
-import { dirname, resolve } from "path";
-import react from "@vitejs/plugin-react-swc";
-import tailwindcss from "@tailwindcss/vite";
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
+import { fileURLToPath, URL } from 'node:url';
+import tailwindcss from '@tailwindcss/vite';
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import vueDevTools from 'vite-plugin-vue-devtools';
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [vue(), tailwindcss(), vueDevTools()],
   resolve: {
     alias: {
-      "@": resolve(__dirname, "./src"),
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
 });
