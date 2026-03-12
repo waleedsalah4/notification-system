@@ -1,69 +1,57 @@
 import { useAppDispatch } from "@/store";
 import { addToast } from "@/store/toasts/toastsSlice";
-import { toastsData } from "@/constants";
-import type { TToast } from "@/types/toast.types";
+import { toastsData, toasterAccentColors } from "@/constants";
+import { ToastIcon } from "@/components/icons/icons";
+import type { ToastVariant } from "@/types/toast.types";
+
+const variants: { key: ToastVariant | "delay"; label: string }[] = [
+  { key: "primary", label: "Primary" },
+  { key: "secondary", label: "Secondary" },
+  { key: "success", label: "Success" },
+  { key: "error", label: "Error" },
+  { key: "warning", label: "Warning" },
+  { key: "info", label: "Info" },
+  { key: "light", label: "Light" },
+  { key: "dark", label: "Dark" },
+  { key: "delay", label: "Delay" },
+];
+
+function getAccentColor(key: ToastVariant | "delay"): string {
+  return key === "delay" ? toasterAccentColors["info"] : toasterAccentColors[key];
+}
 
 function ToastButtons() {
   const dispatch = useAppDispatch();
-  const handleAddToast = (toast: TToast) => {
-    dispatch(addToast(toast));
-  };
   return (
-    <div className="flex flex-wrap items-center justify-start gap-4">
-      <button
-        className="w-28 cursor-pointer rounded-lg border border-[#084298] bg-[#031633] px-3 py-2 text-base font-medium text-[#6ea8fe] capitalize"
-        onClick={() => handleAddToast(toastsData.primary)}
-      >
-        Primary
-      </button>
-      <button
-        className="w-28 cursor-pointer rounded-lg border border-[#41464b] bg-[#161719] px-3 py-2 text-base font-medium text-[#a7acb1] capitalize"
-        onClick={() => handleAddToast(toastsData.secondary)}
-      >
-        Secondary
-      </button>
-      <button
-        className="w-28 cursor-pointer rounded-lg border border-[#0f5132] bg-[#051b11] px-3 py-2 text-base font-medium text-[#75b798] capitalize"
-        onClick={() => handleAddToast(toastsData.success)}
-      >
-        Success
-      </button>
-      <button
-        className="w-28 cursor-pointer rounded-lg border border-[#842029] bg-[#2c0b0e] px-3 py-2 text-base font-medium text-[#ea868f] capitalize"
-        onClick={() => handleAddToast(toastsData.error)}
-      >
-        Error
-      </button>
-      <button
-        className="w-28 cursor-pointer rounded-lg border border-[#997404] bg-[#332701] px-3 py-2 text-base font-medium text-[#ffda6a] capitalize"
-        onClick={() => handleAddToast(toastsData.warning)}
-      >
-        Warning
-      </button>
-      <button
-        className="w-28 cursor-pointer rounded-lg border border-[#087990] bg-[#032830] px-3 py-2 text-base font-medium text-[#6edff6] capitalize"
-        onClick={() => handleAddToast(toastsData.info)}
-      >
-        Info
-      </button>
-      <button
-        className="w-28 cursor-pointer rounded-lg border border-[#495057] bg-[#343a40] px-3 py-2 text-base font-medium text-[#f8f9fa] capitalize"
-        onClick={() => handleAddToast(toastsData.light)}
-      >
-        Light
-      </button>
-      <button
-        className="w-28 cursor-pointer rounded-lg border border-[#343a40] bg-[#1a1d20] px-3 py-2 text-base font-medium text-[#dee2e6] capitalize"
-        onClick={() => handleAddToast(toastsData.dark)}
-      >
-        Dark
-      </button>
-      <button
-        className="w-28 cursor-pointer rounded-lg border border-[#a9abad] bg-[#f8f9fa] px-3 py-2 text-base font-medium text-[#343a40] capitalize"
-        onClick={() => handleAddToast(toastsData.delay)}
-      >
-        Delay
-      </button>
+    <div className="flex flex-wrap gap-3">
+      {variants.map((v) => {
+        const color = getAccentColor(v.key);
+        return (
+          <button
+            key={v.key}
+            className="group flex cursor-pointer items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-medium capitalize transition-all duration-200 hover:scale-[1.03] hover:brightness-110"
+            style={{ borderColor: `${color}40`, backgroundColor: `${color}0d`, color }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.boxShadow = `0 0 18px ${color}35`;
+              e.currentTarget.style.borderColor = `${color}70`;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow = "none";
+              e.currentTarget.style.borderColor = `${color}40`;
+            }}
+            onClick={() => dispatch(addToast(toastsData[v.key]))}
+          >
+            {v.key === "delay" ? (
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-4 opacity-80">
+                <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 0 0 0-1.5h-3.75V6Z" clipRule="evenodd" />
+              </svg>
+            ) : (
+              <ToastIcon type={v.key as ToastVariant} />
+            )}
+            {v.label}
+          </button>
+        );
+      })}
     </div>
   );
 }

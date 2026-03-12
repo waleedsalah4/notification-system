@@ -2,7 +2,7 @@
 
 A customizable toast notification system with built-in animations, icons, positioning, delay appearance, and more.
 
-Supports both **React** and **Angular** implementations in separate branches.
+Implemented across **React**, **Angular**, and **Vue 3** — each in its own branch, each exploring a different approach to state management.
 
 ![notification toast](https://github.com/user-attachments/assets/d07f98dd-d64a-47c6-8c87-68d93009ffab)
 
@@ -10,76 +10,109 @@ Supports both **React** and **Angular** implementations in separate branches.
 
 ## 🚀 Features
 
-- ⚡ Easy to use with a one-liner `addToast` call (React) or service injection (Angular)
-- 🎨 Built-in styling and color schemes (Primary, Success, Error, etc.)
-- 📍 Customizable position: Top/Bottom Left/Right/Center
-- 🕒 Optional delay animation
-- 🧩 Custom title, message, and icons supported
-- 💨 Auto-dismiss with animation
-- 🖱 Pause on hover supported
+- ⚡ Simple one-liner API — `addToast()` / service injection / Pinia action
+- 🎨 8 built-in variants — Primary, Secondary, Success, Error, Warning, Info, Light, Dark
+- 📍 6 configurable positions — Top/Bottom · Left/Right/Center
+- 💨 Auto-dismiss with animated glowing progress bar
+- 🖱 Pause on hover — timer freezes on mouse-over
+- 🕒 Delay appearance — show toast after a short delay
+- 🧩 Optional title, custom message, and per-variant icons
+- 🔔 `onCloseToast` callback — fires on auto or manual dismiss
+- ✨ Fluid animations powered by **motion/react** and **motion-v**
 
 ---
 
 ## 📂 Branches
 
-- `main` – React version (with Redux)
-- `toast-with-zustand` - React version (with Zustand)
-- `toast-with-context-api` - React version (with Context API)
-- `toasts-in-angular` – Angular version
+| Branch | Framework | State Management |
+|---|---|---|
+| `main` | React | Redux Toolkit |
+| `toast-with-zustand` | React | Zustand |
+| `toast-with-context-api` | React | Context API + useReducer |
+| `toasts-in-angular` | Angular 17+ | Angular Signals |
+| `toasts-in-vue` | Vue 3 | Pinia |
 
 ---
 
-## 🧱 Example Usage
+## 🧱 Usage
 
-### React
+### React (Redux Toolkit)
 
 ```tsx
-const handleAddToast = () => {
-  dispatch(
-    addToast({
-      type: "success",
-      title: "Success",
-      message: "This is a custom success toast!",
-      delayAppearance: false,
-    })
-  );
-};
+dispatch(addToast({
+  type: "success",
+  title: "Done!",
+  message: "Your changes have been saved.",
+  delayAppearance: false,
+  onCloseToast: () => console.log("closed"),
+}));
+```
+
+### React (Zustand)
+
+```tsx
+const { addToast } = useToastStore();
+
+addToast({
+  type: "info",
+  message: "Zustand-powered toast!",
+});
+```
+
+### React (Context API)
+
+```tsx
+const { addToast } = useToastContext();
+
+addToast({
+  type: "warning",
+  title: "Heads up",
+  message: "Context API toast, no extra libraries.",
+});
 ```
 
 ### Angular
 
-```tsx
-constructor(private toastService: ToastService) {}
-//or
+```ts
+// inject
 private toastService = inject(ToastService);
 
-addToast() {
-  this.toastService.addToast({
-    type: 'success',
-    title: 'Success',
-    message: 'This is a custom success toast!',
-    delayAppearance: false,
-  });
-}
+this.toastService.addToast({
+  type: "success",
+  title: "Success",
+  message: "Angular Signals-powered toast!",
+  delayAppearance: false,
+});
+```
 
+### Vue 3 (Pinia)
+
+```ts
+const toastStore = useToastStore();
+
+toastStore.addToast({
+  type: "success",
+  title: "Saved!",
+  message: "Vue 3 + Pinia toast.",
+});
 ```
 
 ---
 
-## 💡 Customization
+## 📋 Props / API
 
-You can fully customize:
-
-- type: "success" | "error" | "info" | "warning" | "primary" | etc.
-- title: String
-- message: String
-- delayAppearance: Boolean
-- icon: Optional custom icon
-- position: Controlled via component prop (React) or signal/service (Angular)
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `type` | `ToastVariant` | **required** | Visual variant (success, error, info…) |
+| `message` | `string` | **required** | Main notification text |
+| `title` | `string` | `—` | Optional bold heading above the message |
+| `id` | `string` | auto | Unique ID — auto-generated if omitted |
+| `delayAppearance` | `boolean` | `false` | Show toast after a short delay (~1s) |
+| `onCloseToast` | `() => void` | `—` | Callback fired when toast is dismissed |
 
 ---
 
-## 📦 Installation
+## 📦 Getting Started
 
 Clone the repo and switch to your desired branch:
 
@@ -88,40 +121,48 @@ git clone https://github.com/waleedsalah4/notification-system.git
 cd notification-system
 ```
 
-#### React
+### React (main / zustand / context-api)
 
 ```bash
-git checkout main
+git checkout main   # or toast-with-zustand / toast-with-context-api
 npm install
 npm run dev
-
 ```
 
-#### Angular
+### Angular
 
 ```bash
 git checkout toasts-in-angular
 npm install
-ng serve // or npm run start
+ng serve
+```
 
+### Vue 3
+
+```bash
+git checkout toasts-in-vue
+npm install
+npm run dev
 ```
 
 ---
 
 ## 🛠 Built With
 
-#### React Version
+### React branches
 
-- React
-- TypeScript
-- Redux Toolkit
+- React 19 · TypeScript · Vite
+- Redux Toolkit / Zustand / Context API
+- Tailwind CSS · motion/react
+
+### Angular branch
+
+- Angular 17+ · TypeScript
+- Standalone Components · Angular Signals
 - Tailwind CSS
-- Vite
 
-#### Angular Version
+### Vue 3 branch
 
-- Angular 17+
-- TypeScript
-- Standalone Components
-- Angular Signals
+- Vue 3 · TypeScript · Vite
+- Pinia · motion-v
 - Tailwind CSS
