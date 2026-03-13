@@ -4,7 +4,7 @@ const stack = [
     color: "#61dafb",
     url: "https://react.dev",
     abbr: "R",
-    icon: "M12 13.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Z",
+    icon: null,
   },
   { name: "Redux Toolkit", color: "#764abc", url: "https://redux-toolkit.js.org", abbr: "RTK", icon: null },
   { name: "TypeScript", color: "#3178c6", url: "https://www.typescriptlang.org", abbr: "TS", icon: null },
