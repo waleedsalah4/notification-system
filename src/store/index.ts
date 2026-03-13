@@ -12,7 +12,10 @@ const store = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: {},
+      serializableCheck: {
+        ignoredActions: ["toasts/addToast"],
+        ignoredPaths: [/^toasts\.records\.\d+\.onCloseToast$/],
+      },
     }),
 });
 
