@@ -1,72 +1,45 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { ToastService } from '../../../services/toast.service';
 import { TToast } from '../../../types/toast.types';
-import { toastsData } from '../../../constants/toast.constants';
+import { toastsData, toasterAccentColors } from '../../../constants/toast.constants';
+import { ToastIconComponent } from '../../icons/toast-icon.component';
+
+interface ToastButton {
+  key: string;
+  label: string;
+  color: string;
+  toast: TToast;
+}
 
 @Component({
   selector: 'app-toast-buttons',
-  imports: [],
+  imports: [ToastIconComponent],
   templateUrl: './toast-buttons.html',
 })
 export class ToastButtons {
   private toastService = inject(ToastService);
 
-  toastButtons = [
-    {
-      label: 'Primary',
-      className:
-        'w-28 cursor-pointer rounded-lg border border-[#084298] bg-[#031633] px-3 py-2 text-base font-medium text-[#6ea8fe] capitalize',
-      toast: toastsData['primary'],
-    },
-    {
-      label: 'Secondary',
-      className:
-        'w-28 cursor-pointer rounded-lg border border-[#41464b] bg-[#161719] px-3 py-2 text-base font-medium text-[#a7acb1] capitalize',
-      toast: toastsData['secondary'],
-    },
-    {
-      label: 'Success',
-      className:
-        'w-28 cursor-pointer rounded-lg border border-[#0f5132] bg-[#051b11] px-3 py-2 text-base font-medium text-[#75b798] capitalize',
-      toast: toastsData['success'],
-    },
-    {
-      label: 'Error',
-      className:
-        'w-28 cursor-pointer rounded-lg border border-[#842029] bg-[#2c0b0e] px-3 py-2 text-base font-medium text-[#ea868f] capitalize',
-      toast: toastsData['error'],
-    },
-    {
-      label: 'Warning',
-      className:
-        'w-28 cursor-pointer rounded-lg border border-[#997404] bg-[#332701] px-3 py-2 text-base font-medium text-[#ffda6a] capitalize',
-      toast: toastsData['warning'],
-    },
-    {
-      label: 'Info',
-      className:
-        'w-28 cursor-pointer rounded-lg border border-[#087990] bg-[#032830] px-3 py-2 text-base font-medium text-[#6edff6] capitalize',
-      toast: toastsData['info'],
-    },
-    {
-      label: 'Light',
-      className:
-        'w-28 cursor-pointer rounded-lg border border-[#495057] bg-[#343a40] px-3 py-2 text-base font-medium text-[#f8f9fa] capitalize',
-      toast: toastsData['light'],
-    },
-    {
-      label: 'Dark',
-      className:
-        'w-28 cursor-pointer rounded-lg border border-[#343a40] bg-[#1a1d20] px-3 py-2 text-base font-medium text-[#dee2e6] capitalize',
-      toast: toastsData['dark'],
-    },
-    {
-      label: 'Delay',
-      className:
-        'w-28 cursor-pointer rounded-lg border border-[#a9abad] bg-[#f8f9fa] px-3 py-2 text-base font-medium text-[#343a40] capitalize',
-      toast: toastsData['delay'],
-    },
+  hoveredKey = signal<string | null>(null);
+
+  toastButtons: ToastButton[] = [
+    { key: 'primary',   label: 'Primary',   color: toasterAccentColors['primary'],   toast: toastsData['primary'] },
+    { key: 'secondary', label: 'Secondary', color: toasterAccentColors['secondary'], toast: toastsData['secondary'] },
+    { key: 'success',   label: 'Success',   color: toasterAccentColors['success'],   toast: toastsData['success'] },
+    { key: 'error',     label: 'Error',     color: toasterAccentColors['error'],     toast: toastsData['error'] },
+    { key: 'warning',   label: 'Warning',   color: toasterAccentColors['warning'],   toast: toastsData['warning'] },
+    { key: 'info',      label: 'Info',      color: toasterAccentColors['info'],      toast: toastsData['info'] },
+    { key: 'light',     label: 'Light',     color: toasterAccentColors['light'],     toast: toastsData['light'] },
+    { key: 'dark',      label: 'Dark',      color: toasterAccentColors['dark'],      toast: toastsData['dark'] },
+    { key: 'delay',     label: 'Delay',     color: toasterAccentColors['info'],      toast: toastsData['delay'] },
   ];
+
+  getBorderColor(btn: ToastButton): string {
+    return this.hoveredKey() === btn.key ? `${btn.color}70` : `${btn.color}40`;
+  }
+
+  getBoxShadow(btn: ToastButton): string {
+    return this.hoveredKey() === btn.key ? `0 0 18px ${btn.color}35` : 'none';
+  }
 
   handleAddToast(toast: TToast): void {
     this.toastService.addToast(toast);

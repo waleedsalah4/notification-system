@@ -5,6 +5,10 @@ import { GithubButtonComponent } from './components/header/github-button';
 import { ShowToastButtonComponent } from './components/header/show-toast-button';
 import { ToastButtons } from './components/toasts/toast-buttons/toast-buttons';
 import { ToastListComponent } from './components/toasts/toast-list/toast-list.component';
+import { FeatureHighlightsComponent } from './components/sections/feature-highlights.component';
+import { PropsTableComponent } from './components/sections/props-table.component';
+import { TechStackComponent } from './components/sections/tech-stack.component';
+import { FrameworkCardsComponent } from './components/sections/framework-cards.component';
 
 @Component({
   selector: 'app-root',
@@ -14,11 +18,16 @@ import { ToastListComponent } from './components/toasts/toast-list/toast-list.co
     ShowToastButtonComponent,
     ToastButtons,
     ToastListComponent,
+    FeatureHighlightsComponent,
+    PropsTableComponent,
+    TechStackComponent,
+    FrameworkCardsComponent,
   ],
   templateUrl: './app.html',
 })
 export class App {
   position = signal<TPosition>('bottom-right');
+
   onPositionUpdate(position: TPosition) {
     this.position.set(position);
   }

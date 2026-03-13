@@ -1,5 +1,16 @@
 import { TToast, TPosition } from '../types/toast.types';
 
+export const toasterAccentColors: Record<string, string> = {
+  primary: '#6ea8fe',
+  secondary: '#a7acb1',
+  success: '#75b798',
+  error: '#ea868f',
+  warning: '#ffda6a',
+  info: '#6edff6',
+  light: '#f8f9fa',
+  dark: '#dee2e6',
+};
+
 export const positions: TPosition[] = [
   'top-left',
   'top-center',

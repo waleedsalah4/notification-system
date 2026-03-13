@@ -1,11 +1,24 @@
-<div class="flex flex-wrap items-center justify-start gap-4">
-  @for (btn of toastButtons; track $index) {
-  <button
-    type="button"
-    [class]="btn.className"
-    (click)="handleAddToast(btn.toast)"
-  >
-    {{ btn.label }}
-  </button>
+<div class="flex flex-wrap gap-3">
+  @for (btn of toastButtons; track btn.key) {
+    <button
+      type="button"
+      class="flex cursor-pointer items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-medium capitalize transition-all duration-200 hover:scale-[1.03] hover:brightness-110"
+      [style.border-color]="getBorderColor(btn)"
+      [style.background-color]="btn.color + '0d'"
+      [style.color]="btn.color"
+      [style.box-shadow]="getBoxShadow(btn)"
+      (mouseenter)="hoveredKey.set(btn.key)"
+      (mouseleave)="hoveredKey.set(null)"
+      (click)="handleAddToast(btn.toast)"
+    >
+      @if (btn.key === 'delay') {
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4 opacity-80">
+          <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 0 0 0-1.5h-3.75V6Z" clip-rule="evenodd" />
+        </svg>
+      } @else {
+        <app-toast-icon [type]="$any(btn.key)" />
+      }
+      {{ btn.label }}
+    </button>
   }
 </div>

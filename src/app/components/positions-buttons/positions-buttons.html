@@ -1,15 +1,34 @@
-<div class="flex w-full flex-wrap items-center justify-start gap-2">
-  @for (pos of positions(); track $index) {
-  <button
-    type="button"
-    (click)="onPositionChange(pos)"
-    [ngClass]="{
-      'bg-blue-600 text-white': position() === pos,
-      'bg-gray-800 text-gray-300 hover:bg-gray-700': position() !== pos,
-      'cursor-pointer rounded px-3 py-2 text-sm font-medium capitalize transition': true
-    }"
-  >
-    {{pos.replace("-", " ")}}
-  </button>
-  }
+<div class="flex flex-wrap items-center gap-8">
+  <!-- Visual 3x2 grid picker -->
+  <div class="relative grid grid-cols-3 gap-2 rounded-2xl border border-white/10 bg-black/30 p-3">
+    <div class="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-white/[0.03] to-transparent"></div>
+    @for (pos of positions(); track pos) {
+      <button
+        type="button"
+        [title]="pos"
+        [attr.aria-label]="pos"
+        class="relative flex h-14 w-16 cursor-pointer rounded-xl border p-2 transition-all duration-200"
+        [ngClass]="isActive(pos)
+          ? 'border-blue-500/60 bg-blue-500/15 shadow-[0_0_14px_rgba(59,130,246,0.35)]'
+          : 'border-white/8 bg-white/4 hover:border-white/20 hover:bg-white/8'"
+        (click)="onPositionChange(pos)"
+      >
+        <span class="flex h-full w-full" [ngClass]="getDotAlign(pos)">
+          <span
+            class="h-2 w-2 rounded-full transition-all duration-200"
+            [ngClass]="isActive(pos)
+              ? 'bg-blue-400 shadow-[0_0_6px_rgba(96,165,250,0.9)]'
+              : 'bg-gray-600'"
+          ></span>
+        </span>
+      </button>
+    }
+  </div>
+
+  <!-- Active label -->
+  <div class="space-y-1">
+    <p class="text-xs font-semibold uppercase tracking-widest text-gray-500">Active position</p>
+    <p class="text-base font-semibold capitalize text-white">{{ position().replace('-', ' ') }}</p>
+    <p class="text-xs text-gray-500">Click a cell to move toasts</p>
+  </div>
 </div>
