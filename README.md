@@ -4,6 +4,7 @@ A customizable toast notification system with built-in animations, icons, positi
 
 Implemented across **React**, **Angular**, and **Vue 3** — each in its own branch, each exploring a different approach to state management.
 
+![notification-toast](https://notification-toast.vercel.app/notification-toast.webp)
 
 ---
 
