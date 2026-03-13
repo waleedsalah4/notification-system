@@ -1,18 +1,19 @@
 import { useCallback, useEffect, useState } from "react";
 import { useToastStore } from "@/store/toastStore";
-import { cn } from "@/lib/utils";
-import { CloseIcon } from "@/components/icons/icons";
+import { CloseIcon, ToastIcon } from "@/components/icons/icons";
+import { toasterAccentColors } from "@/constants";
 import type { TToast } from "@/types/toast.types";
 
+// Kept for ToastVariant type derivation in toast.types.ts
 export const toastersValues = {
-  primary: "border-[#084298] bg-[#031633] text-[#6ea8fe]",
-  secondary: "border-[#41464b] bg-[#161719] text-[#a7acb1]",
-  success: "border-[#0f5132] bg-[#051b11] text-[#75b798]",
-  error: "border-[#842029] bg-[#2c0b0e]  text-[#ea868f]",
-  warning: "border-[#997404] bg-[#332701]  text-[#ffda6a]",
-  info: "border-[#087990] bg-[#032830]  text-[#6edff6]",
-  light: "border-[#495057] bg-[#343a40]  text-[#f8f9fa]",
-  dark: "border-[#343a40] bg-[#1a1d20]  text-[#dee2e6]",
+  primary: "#6ea8fe",
+  secondary: "#a7acb1",
+  success: "#75b798",
+  error: "#ea868f",
+  warning: "#ffda6a",
+  info: "#6edff6",
+  light: "#f8f9fa",
+  dark: "#dee2e6",
 };
 
 interface ToastItemProps {
@@ -20,98 +21,100 @@ interface ToastItemProps {
 }
 
 function ToastItem({ toast }: ToastItemProps) {
-  const variantClass = toastersValues[toast.type];
+  const accentColor = toasterAccentColors[toast.type];
   const { removeToast, stopDelayAppearance } = useToastStore();
 
   const [progressBarIndicator, setProgressBarIndicator] = useState(0);
-  const [pauseProgressBarIndicator, setPauseProgressBarIndicator] =
-    useState(false);
+  const [pauseProgressBarIndicator, setPauseProgressBarIndicator] = useState(false);
 
-  const totalWidth = 100; // The progress bar width is 400 pixels, representing 100% completion.
-  const duration = 4000; // Total duration in milliseconds
-  const intervalTime = duration / totalWidth; // Interval time in milliseconds
+  const totalWidth = 100;
+  const duration = 4000;
+  const intervalTime = duration / totalWidth;
   const delayAnimationDuration = duration / 2;
-  const maxProgress = 100; // 100% completion
+  const maxProgress = 100;
 
-  // remove toast handler
   const closeToastHandler = useCallback(() => {
     removeToast(toast.id);
     toast.onCloseToast?.();
-  }, [toast.id, toast.onCloseToast]);
+  }, [toast.id, toast.onCloseToast, removeToast]);
 
-  //handle mouse hover over
-  const handleMouseEvent = () => {
-    setPauseProgressBarIndicator((prevState) => !prevState);
-  };
+  const handleMouseEvent = () => setPauseProgressBarIndicator((prev) => !prev);
 
-  // progress bar indicator increment
   useEffect(() => {
-    // if delay true stop progress bar
     if (toast.delayAppearance) return;
-
     const timerId = setInterval(() => {
-      setProgressBarIndicator((prevState) => {
-        //if pause true stop incrementing progress
-        if (!pauseProgressBarIndicator)
-          if (prevState < maxProgress) {
-            return prevState + 1; //increase 1 pixel
-          }
-        return prevState;
+      setProgressBarIndicator((prev) => {
+        if (!pauseProgressBarIndicator && prev < maxProgress) return prev + 1;
+        return prev;
       });
     }, intervalTime);
-
     return () => clearInterval(timerId);
   }, [intervalTime, pauseProgressBarIndicator, toast.delayAppearance]);
 
-  //close toast when progress bar is completed
   useEffect(() => {
-    if (progressBarIndicator === 100) {
-      closeToastHandler();
-    }
+    if (progressBarIndicator === 100) closeToastHandler();
   }, [progressBarIndicator, closeToastHandler]);
 
-  // handle delay animation
   useEffect(() => {
     if (toast.delayAppearance) {
       const myTimeout = setTimeout(() => {
         stopDelayAppearance(toast.id || "");
       }, 1000);
-
       return () => clearTimeout(myTimeout);
     }
-  }, [toast.delayAppearance, delayAnimationDuration, toast.id]);
+  }, [toast.delayAppearance, delayAnimationDuration, toast.id, stopDelayAppearance]);
 
-  // if delay true, return nothing
-  if (toast.delayAppearance) return "";
+  if (toast.delayAppearance) return null;
 
   return (
     <div
-      className={cn(
-        "relative mb-4 overflow-hidden rounded-md border p-4 text-start",
-        variantClass
-      )}
+      className="relative mb-3 flex items-start gap-3 overflow-hidden rounded-2xl border border-white/8 p-4 text-start backdrop-blur-xl"
+      style={{
+        background: `radial-gradient(ellipse at 0% 50%, ${accentColor}18 0%, transparent 60%), rgba(0, 0, 0, 0.65)`,
+      }}
       onMouseEnter={handleMouseEvent}
       onMouseLeave={handleMouseEvent}
     >
-      <h5 className="text-base capitalize">{toast.title}</h5>
-      <p className="text-[15px] capitalize">{toast.message}</p>
+      {/* Glowing icon badge */}
+      <div
+        className="mt-0.5 shrink-0 rounded-xl p-2"
+        style={{
+          background: `${accentColor}20`,
+          boxShadow: `0 0 14px ${accentColor}40`,
+          color: accentColor,
+        }}
+      >
+        <ToastIcon type={toast.type} />
+      </div>
+
+      {/* Content */}
+      <div className="min-w-0 flex-1">
+        {toast.title && (
+          <h5 className="text-sm font-semibold capitalize text-white">{toast.title}</h5>
+        )}
+        <p className="text-sm capitalize text-gray-300">{toast.message}</p>
+      </div>
+
+      {/* Close button */}
       <button
         type="button"
         aria-label="Close"
-        className="absolute top-2 right-2 cursor-pointer text-white opacity-50 hover:opacity-75 focus:opacity-100"
+        className="shrink-0 cursor-pointer rounded-lg p-1 text-gray-500 transition-all hover:bg-white/10 hover:text-white"
         onClick={() => removeToast(toast.id)}
       >
-        <CloseIcon className="size-2" />
+        <CloseIcon className="size-2.5" />
       </button>
+
+      {/* Progress bar */}
       <span
-        className="absolute bottom-0 left-0 inline-block h-1 bg-current align-middle opacity-50"
+        className="absolute bottom-0 left-0 h-0.5 rounded-full"
         style={{
           width: `${progressBarIndicator}%`,
+          background: accentColor,
+          boxShadow: `0 0 8px ${accentColor}80`,
           transition: `width ${intervalTime}ms linear`,
         }}
-      >
-        placeholder
-      </span>
+      />
     </div>
   );
 }
